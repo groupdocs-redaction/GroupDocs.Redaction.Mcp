@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>GroupDocs.Redaction.Mcp</PackageId>
+    <Version>$(GroupDocsRedactionMcp)</Version>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Description>MCP server exposing GroupDocs.Redaction for .NET — redact text by regex, erase metadata, redact or delete annotations, and cover image areas in documents via AI agents.</Description>
+    <PackageTags>groupdocs;redaction;mcp;model-context-protocol;mcp-server;dotnet-tool;ai;document-redaction</PackageTags>
+    <PackageIcon>images\icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
+    <!-- Package as a .NET tool so the nupkg gets the required tools/ layout
+         for `dnx` / `dotnet tool install` invocation. -->
+    <PackAsTool>true</PackAsTool>
+    <!-- Mark as MCP server for NuGet.org discovery (packagetype=McpServer filter).
+         NOTE: correct MSBuild property is singular <PackageType>; the plural form is ignored. -->
+    <PackageType>McpServer</PackageType>
+    <!-- CLI tool name for dnx / dotnet tool install invocation -->
+    <ToolCommandName>groupdocs-redaction-mcp</ToolCommandName>
+  </PropertyGroup>
+
+  <!-- Strip native debug symbols (libSkiaSharp.pdb ≈ 80 MB each) from the
+       published tools/ output BEFORE pack collects it — keeps the nupkg under
+       NuGet.org's 250 MB hard limit (otherwise publish fails with HTTP 413).
+       Only runtimes/<rid>/native/*.pdb are removed; the managed PDB is kept. -->
+  <Target Name="StripNativeRuntimePdbs" AfterTargets="Publish">
+    <ItemGroup>
+      <_NativeRuntimePdbs Include="$(PublishDir)runtimes/**/*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(_NativeRuntimePdbs)" />
+    <Message
+      Text="StripNativeRuntimePdbs: removed @(_NativeRuntimePdbs->Count()) native PDB file(s) from publish output to keep the nupkg under NuGet.org's 250 MB limit."
+      Importance="high"
+      Condition="@(_NativeRuntimePdbs->Count()) > 0" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="..\..\assets\icon.png" Pack="true" Visible="false" PackagePath="images\icon.png" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="/" />
+    <!-- server.json — read by NuGet.org to generate mcp.json snippets on the package page -->
+    <None Include=".mcp\server.json" Pack="true" PackagePath=".mcp/server.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Core infrastructure — NuGet packages from groupdocs-mcp-core -->
+    <PackageReference Include="GroupDocs.Mcp.Core" Version="$(GroupDocsMcpCore)" />
+    <PackageReference Include="GroupDocs.Mcp.Local.Storage" Version="$(GroupDocsMcpCore)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GroupDocs.Redaction" Version="$(GroupDocsRedaction)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHosting)" />
+    <PackageReference Include="ModelContextProtocol" Version="$(ModelContextProtocol)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- GroupDocs.Redaction pulls SkiaSharp (managed) transitively but the
+         platform native asset isn't always declared, so libSkiaSharp.so can be
+         missing on Linux. Pin explicitly so the native asset is present and
+         transitive resolution stays deterministic. Must match the SkiaSharp
+         version GroupDocs.Redaction pulls (see build/dependencies.props). -->
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="$(SkiaSharp)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- GroupDocs.Redaction's image-area redaction path uses System.Drawing.Common.
+         On non-Windows that throws PlatformNotSupportedException unless this flag
+         is set. Pair with libgdiplus + libfontconfig1 in docker/Dockerfile. -->
+    <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+  </ItemGroup>
+
+</Project>

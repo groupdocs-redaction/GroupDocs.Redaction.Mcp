@@ -1,0 +1,44 @@
+# GroupDocs.Redaction MCP Server
+
+MCP server for GroupDocs.Redaction — redact text, metadata, annotations, and image areas in documents via AI agents.
+
+## Install
+
+- With dnx (.NET 10 SDK, no install step): `dnx GroupDocs.Redaction.Mcp@26.5.0 --yes`
+- As a global dotnet tool: `dotnet tool install -g GroupDocs.Redaction.Mcp` then run `groupdocs-redaction-mcp`
+- As a Docker container: `docker run --rm -i -v $(pwd)/documents:/data ghcr.io/groupdocs-redaction/redaction-net-mcp:latest`
+- Native prerequisite for native (dnx / global tool) runs on Linux and macOS: install libgdiplus — `sudo apt-get install -y libgdiplus libfontconfig1` on Linux, `brew install mono-libgdiplus` on macOS. Not needed on Windows (GDI+ built in) or in Docker (bundled in the image).
+
+## MCP tools
+
+- RedactText — redact text matching a regex pattern in a document; saves result as `<name>_redacted.<ext>`
+- EraseMetadata — erase document metadata fields (author, title, company, dates, and other properties)
+- RedactAnnotations — replace or delete annotations and comments in a document
+- RedactImageArea — cover a rectangular page region with a solid-color box (pixel coordinates)
+- GetDocumentInfo — return file type, page count, size, and per-page dimensions as JSON (no modification)
+
+## Supported formats
+
+PDF, DOCX, XLSX, PPTX, JPEG, PNG, TIFF, and other document and image formats supported by GroupDocs.Redaction.
+
+## Environment variables
+
+- GROUPDOCS_MCP_STORAGE_PATH — base folder for input + output (defaults to current working directory)
+- GROUPDOCS_MCP_OUTPUT_PATH — optional, routes output files to a separate folder
+- GROUPDOCS_LICENSE_PATH — path to GroupDocs.Total.lic, omit for evaluation mode
+
+## Key links
+
+- NuGet: https://www.nuget.org/packages/GroupDocs.Redaction.Mcp
+- Repository: https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp
+- Docker: ghcr.io/groupdocs-redaction/redaction-net-mcp and docker.io/groupdocs/redaction-net-mcp
+- MCP Registry: io.github.groupdocs-redaction/groupdocs-redaction-mcp
+- License: MIT
+
+## Example prompts for AI agents
+
+- "Redact all occurrences of 'John Smith' in contract.docx"
+- "Remove all metadata from report.pdf before sharing it externally"
+- "Delete all comments and annotations from review.docx"
+- "Cover the signature area on page 1 of agreement.pdf with a black box from (100,200) to (400,300)"
+- "How many pages does confidential.pdf have?"
