@@ -35,7 +35,7 @@ src/                                             ← all projects + sln + Direct
       GetDocumentInfoTool.cs                     ← [McpServerTool] — GetDocumentInfo
     .mcp/
       server.json                                ← NuGet.org reads this to generate mcp.json snippet
-    GroupDocs.Redaction.Mcp.csproj               ← PackageTypes=McpServer + ToolCommandName
+    GroupDocs.Redaction.Mcp.csproj               ← PackageType=McpServer + ToolCommandName
   GroupDocs.Redaction.Mcp.Tests/
   GroupDocs.Redaction.Mcp.sln
   Directory.Build.props
@@ -89,7 +89,7 @@ CalVer `YY.MM.N`. The version lives in **two** places that MUST stay in lockstep
 The following cross-product pitfalls were addressed at clone time and are already in the codebase:
 
 - **Pitfall #18 (unhandled exceptions in tool methods)**: all five tools have a top-level try/catch that formats exceptions as structured MCP error responses rather than letting them propagate as unformatted stack traces. Do not remove these wrappers.
-- **Pitfall #16 (N/A)**: Pitfall #16 applies to tools that return in-memory content rather than writing files. All four redaction tools write output files to storage, so Pitfall #16 does not apply here.
+- **Pitfall #16 (in-memory JSON)**: Pitfall #16 applies to tools that return in-memory content rather than writing files. The four redaction tools write output files to storage; `GetDocumentInfo` returns raw JSON and deliberately serializes it directly (never via `OutputHelper.TruncateText`), so the document payload is never truncated mid-JSON.
 
 ## Native-deps note
 
@@ -111,5 +111,5 @@ See [RELEASE.md](RELEASE.md) for the exact per-release checklist.
 ## What NOT to change
 
 - Do not hardcode the version in `.csproj` — it flows from `$(GroupDocsRedactionMcp)` in `dependencies.props`.
-- Do not remove the `<PackageTypes>McpServer</PackageTypes>` or `<ToolCommandName>groupdocs-redaction-mcp</ToolCommandName>` from the csproj — NuGet.org discoverability and `dnx` invocation depend on them.
+- Do not remove the `<PackageType>McpServer</PackageType>` or `<ToolCommandName>groupdocs-redaction-mcp</ToolCommandName>` from the csproj — NuGet.org discoverability and `dnx` invocation depend on them.
 - Do not change the `.mcp/server.json` schema URL without cross-checking with the NuGet MCP docs.

@@ -27,7 +27,7 @@ RUN apt-get update \
 # self-identify instead of inheriting the base image's misleading version.
 ARG VERSION=dev
 LABEL org.opencontainers.image.title="GroupDocs.Redaction.Mcp" \
-      org.opencontainers.image.description="MCP server for GroupDocs.Redaction — redact text, metadata, annotations, and image areas in documents via AI agents." \
+      org.opencontainers.image.description="MCP server for GroupDocs.Redaction — redact text, metadata, annotations, and image areas via AI agents (RedactText, EraseMetadata, RedactAnnotations, RedactImageArea, GetDocumentInfo)." \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.source="https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp" \
       org.opencontainers.image.url="https://www.nuget.org/packages/GroupDocs.Redaction.Mcp" \

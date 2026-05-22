@@ -1,6 +1,6 @@
 # GroupDocs.Redaction MCP Server
 
-MCP server for GroupDocs.Redaction — redact text, metadata, annotations, and image areas in documents via AI agents.
+MCP server for GroupDocs.Redaction — redact text, metadata, annotations, image areas via AI agents.
 
 ## Install
 
