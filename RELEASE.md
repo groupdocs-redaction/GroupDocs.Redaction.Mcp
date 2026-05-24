@@ -8,7 +8,7 @@ End-to-end checklist for releasing a new version to NuGet.org + ghcr.io + Docker
 - `MM` — month without leading zero (e.g. `4` = April)
 - `N` — patch increment starting at `0`; increment for hotfixes within the same month
 
-Example: `26.4.0`, `26.4.1`, `26.5.0`.
+Example: `26.4.0`, `26.4.1`, `26.5.1`.
 
 ---
 

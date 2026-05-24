@@ -5,6 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+// Map gdiplus.dll → system libgdiplus on Linux/macOS so image-area redaction works
+// (no-op on Windows). Must run before any tool triggers a GDI+ P/Invoke.
+GdiPlusResolver.Register();
+
 var version = typeof(Program).Assembly
     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
     ?.InformationalVersion
