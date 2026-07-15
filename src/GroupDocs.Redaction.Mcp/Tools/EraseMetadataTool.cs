@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text;
 using GroupDocs.Mcp.Core;
 using GroupDocs.Mcp.Core.Licensing;
 using GroupDocs.Redaction.Options;
@@ -62,10 +61,10 @@ public static class EraseMetadataTool
         }
         catch (Exception ex)
         {
-            // Surface the underlying engine exception instead of letting it bubble
-            // to MCP's generic "An error occurred invoking 'erase_metadata'."
-            // wrapper. Pattern per Pitfall #18.
-            return FormatException(ex, resolved.FileName);
+            // Surface the engine exception via the shared descriptive formatter
+            // instead of MCP's generic "An error occurred invoking 'erase_metadata'."
+            // wrapper (Pitfall #18).
+            return ToolError.Format("Metadata erasure", resolved.FileName, ex);
         }
     }
 
@@ -81,16 +80,5 @@ public static class EraseMetadataTool
                 result |= filter;
         }
         return result == (MetadataFilters)0 ? MetadataFilters.All : result;
-    }
-
-    private static string FormatException(Exception ex, string fileName)
-    {
-        var sb = new StringBuilder();
-        sb.Append($"Metadata erasure failed for '{fileName}': ");
-        sb.Append($"{ex.GetType().FullName}: {ex.Message}");
-        var inner = ex.InnerException;
-        for (int depth = 0; inner != null && depth < 5; depth++, inner = inner.InnerException)
-            sb.Append($" | inner({depth}): {inner.GetType().FullName}: {inner.Message}");
-        return sb.ToString();
     }
 }
