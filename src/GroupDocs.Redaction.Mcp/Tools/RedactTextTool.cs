@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text;
 using GroupDocs.Mcp.Core;
 using GroupDocs.Mcp.Core.Licensing;
 using GroupDocs.Redaction.Options;
@@ -58,21 +57,10 @@ public static class RedactTextTool
         }
         catch (Exception ex)
         {
-            // Surface the underlying engine exception instead of letting it bubble
-            // to MCP's generic "An error occurred invoking 'redact_text'." wrapper.
-            // Pattern per Pitfall #18.
-            return FormatException(ex, resolved.FileName);
+            // Surface the engine exception via the shared descriptive formatter
+            // instead of MCP's generic "An error occurred invoking 'redact_text'."
+            // wrapper (Pitfall #18).
+            return ToolError.Format("Text redaction", resolved.FileName, ex);
         }
-    }
-
-    private static string FormatException(Exception ex, string fileName)
-    {
-        var sb = new StringBuilder();
-        sb.Append($"Text redaction failed for '{fileName}': ");
-        sb.Append($"{ex.GetType().FullName}: {ex.Message}");
-        var inner = ex.InnerException;
-        for (int depth = 0; inner != null && depth < 5; depth++, inner = inner.InnerException)
-            sb.Append($" | inner({depth}): {inner.GetType().FullName}: {inner.Message}");
-        return sb.ToString();
     }
 }
