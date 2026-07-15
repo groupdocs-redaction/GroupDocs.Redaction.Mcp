@@ -24,16 +24,16 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package Versions">
-    <GroupDocsRedactionMcp>26.5.1</GroupDocsRedactionMcp>
+    <GroupDocsRedactionMcp>26.7.0</GroupDocsRedactionMcp>
   </PropertyGroup>
 
   <PropertyGroup Label="External Dependency Versions">
     <GroupDocsMcpCore>26.4.1</GroupDocsMcpCore>
-    <GroupDocsRedaction>26.5.0</GroupDocsRedaction>
+    <GroupDocsRedaction>26.6.0</GroupDocsRedaction>
     <MicrosoftExtensionsHosting>10.0.5</MicrosoftExtensionsHosting>
     <ModelContextProtocol>1.1.0</ModelContextProtocol>
     <MicrosoftSourceLinkGithub>8.0.0</MicrosoftSourceLinkGithub>
-    <!-- Must match the SkiaSharp version $(GroupDocsRedaction) transitively pulls. GroupDocs.Redaction 26.5.0 (via GroupDocs.Redaction.Net100) declares SkiaSharp 3.119.1. Re-verify after every GroupDocsRedaction bump (ABI-incompatible otherwise). -->
+    <!-- Must match the SkiaSharp version $(GroupDocsRedaction) transitively pulls. GroupDocs.Redaction 26.6.0 (via GroupDocs.Redaction.Net100) declares SkiaSharp 3.119.1. Re-verify after every GroupDocsRedaction bump (ABI-incompatible otherwise). -->
     <SkiaSharp>3.119.1</SkiaSharp>
   </PropertyGroup>
 
