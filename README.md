@@ -17,7 +17,7 @@ Pulls the latest stable release on every invocation. To pin to a specific
 version (recommended for shared configs and CI), append `@<version>`:
 
 ```bash
-dnx GroupDocs.Redaction.Mcp@26.5.1 --yes
+dnx GroupDocs.Redaction.Mcp@26.7.0 --yes
 ```
 
 **Or install as a global dotnet tool:**
@@ -97,7 +97,7 @@ the tool response. The simplest zero-setup option on Linux/macOS is the
 ```
 
 > To pin to a specific version, replace `"GroupDocs.Redaction.Mcp"` with
-> `"GroupDocs.Redaction.Mcp@26.5.1"` in `args`. Pinning is recommended for
+> `"GroupDocs.Redaction.Mcp@26.7.0"` in `args`. Pinning is recommended for
 > shared / committed configs to avoid surprise upgrades.
 
 ## Usage with VS Code / GitHub Copilot
@@ -131,7 +131,7 @@ Alternatively, add manually to `.vscode/mcp.json`:
 ```
 
 > Same pinning rule as above — swap `"GroupDocs.Redaction.Mcp"` for
-> `"GroupDocs.Redaction.Mcp@26.5.1"` to lock to a specific release.
+> `"GroupDocs.Redaction.Mcp@26.7.0"` to lock to a specific release.
 
 ## Usage with Docker Compose
 
@@ -154,6 +154,7 @@ live in the companion repo
 - [Use with Claude Desktop](https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp.Tests/blob/master/how-to/04-use-with-claude-desktop.md)
 - [Use with VS Code / GitHub Copilot](https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp.Tests/blob/master/how-to/05-use-with-vscode-copilot.md)
 - [Run the integration tests](https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp.Tests/blob/master/how-to/06-run-integration-tests.md)
+- [Use with Cursor](https://github.com/groupdocs-redaction/GroupDocs.Redaction.Mcp.Tests/blob/master/how-to/07-use-with-cursor.md)
 
 That repo also exercises every advertised tool against the **published** NuGet
 artifact on Linux, macOS, and Windows in CI — so the snippets above are

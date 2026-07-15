@@ -1,11 +1,16 @@
 using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using GroupDocs.Mcp.Core;
 using GroupDocs.Mcp.Core.Licensing;
 using GroupDocs.Redaction.Options;
 using GroupDocs.Redaction.Redactions;
 using ModelContextProtocol.Server;
+// Engine 26.6.0 deprecated the System.Drawing-typed ImageAreaRedaction /
+// RegionReplacementOptions overloads ("System.Drawing support will be removed in
+// a future release"). Use the GroupDocs.Redaction.Options.Drawing types instead.
+using GdColor = GroupDocs.Redaction.Options.Drawing.Color;
+using GdPoint = GroupDocs.Redaction.Options.Drawing.Point;
+using GdSize = GroupDocs.Redaction.Options.Drawing.Size;
 
 namespace GroupDocs.Redaction.Mcp.Tools;
 
@@ -39,8 +44,8 @@ public static class RedactImageAreaTool
         {
             var fillColor = ParseColor(color);
             var redaction = new ImageAreaRedaction(
-                new Point(x, y),
-                new RegionReplacementOptions(fillColor, new Size(width, height)));
+                new GdPoint(x, y),
+                new RegionReplacementOptions(fillColor, new GdSize(width, height)));
 
             var loadOptions = new LoadOptions { Password = password };
             using var redactor = new Redactor(resolved.Stream, loadOptions);
@@ -68,27 +73,22 @@ public static class RedactImageAreaTool
         }
         catch (Exception ex)
         {
-            // Surface the underlying engine exception instead of letting it bubble
-            // to MCP's generic "An error occurred invoking 'redact_image_area'."
-            // wrapper. Pattern per Pitfall #18.
-            return FormatException(ex, resolved.FileName);
+            // Surface the engine exception via the shared descriptive formatter
+            // instead of MCP's generic "An error occurred invoking 'redact_image_area'."
+            // wrapper (Pitfall #18).
+            return ToolError.Format("Image area redaction", resolved.FileName, ex);
         }
     }
 
-    private static Color ParseColor(string color)
+    private static GdColor ParseColor(string color)
     {
-        try { return ColorTranslator.FromHtml(color); }
-        catch { return Color.Black; }
-    }
-
-    private static string FormatException(Exception ex, string fileName)
-    {
-        var sb = new StringBuilder();
-        sb.Append($"Image area redaction failed for '{fileName}': ");
-        sb.Append($"{ex.GetType().FullName}: {ex.Message}");
-        var inner = ex.InnerException;
-        for (int depth = 0; inner != null && depth < 5; depth++, inner = inner.InnerException)
-            sb.Append($" | inner({depth}): {inner.GetType().FullName}: {inner.Message}");
-        return sb.ToString();
+        // ColorTranslator.FromHtml parses both named colors and hex ('#RRGGBB').
+        // Convert its System.Drawing.Color result into the engine's own color type.
+        try
+        {
+            var c = ColorTranslator.FromHtml(color);
+            return GdColor.FromArgb(c.A, c.R, c.G, c.B);
+        }
+        catch { return GdColor.Black; }
     }
 }
