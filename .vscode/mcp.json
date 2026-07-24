@@ -9,6 +9,14 @@
     }
   ],
   "servers": {
+    "groupdocs-redaction": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["GroupDocs.Redaction.Mcp", "--yes"],
+      "env": {
+        "GROUPDOCS_MCP_STORAGE_PATH": "${input:storage_path}"
+      }
+    },
     "groupdocs-redaction-dev": {
       "type": "stdio",
       "command": "dotnet",
